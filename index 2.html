@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Simulador EGEL IINDU - Logística 2.2 y 2.3</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; }
+h1 { color: #333; }
+button { margin-top: 10px; }
+.question { margin-bottom: 15px; }
+.option { margin-left: 20px; margin-bottom: 5px; }
+#timer { font-weight: bold; color: red; margin-bottom: 20px; }
+#feedback { margin-top: 10px; color: blue; }
+</style>
+</head>
+<body>
+<h1>Simulador EGEL IINDU - Logística 2.2 y 2.3</h1>
+<div id="timer">Tiempo restante: 60:00</div>
+<div id="quiz"></div>
+<button onclick="startQuiz()">Iniciar bloque</button>
+<div id="feedback"></div>
+<button id="nextBtn" style="display:none;" onclick="nextQuestion()">Siguiente</button>
+<script>
+// Banco de preguntas de ejemplo para Logística 2.2 y 2.3 (10 por subárea)
+// Aquí agregamos varias preguntas para que puedas empezar a estudiar
+const questions = [
+  {text:"¿Cuál es el objetivo principal de la planeación de la demanda?", options:["A) Reducir inventarios","B) Satisfacer al cliente","C) Minimizar costos de transporte","D) Optimizar almacenes"], answer:1, explanation:"La planeación de la demanda busca satisfacer las necesidades del cliente de manera eficiente. Fuente: Ballou, R. (2004)."},
+  {text:"El método EOQ se utiliza para:", options:["A) Calcular el punto de reorden","B) Determinar cantidad económica de pedido","C) Medir rotación de inventarios","D) Evaluar proveedores"], answer:1, explanation:"EOQ calcula la cantidad óptima de pedido minimizando costos totales. Fuente: Ballou, R. (2004)."},
+  {text:"La función principal de la logística es:", options:["A) Transporte","B) Almacenamiento","C) Satisfacer la demanda de clientes","D) Inventario"], answer:2, explanation:"La logística busca satisfacer la demanda de los clientes de manera eficiente. Fuente: Ballou, R. (2004)."},
+  {text:"¿Qué indicador mide la eficiencia en inventarios?", options:["A) Costo de transporte","B) Rotación de inventarios","C) Punto de reorden","D) Nivel de servicio"], answer:1, explanation:"La rotación de inventarios indica cuántas veces se renueva el inventario en un periodo. Fuente: Ballou, R. (2004)."},
+  {text:"El diseño de la red de suministro busca principalmente:", options:["A) Reducir proveedores","B) Optimizar ubicación de almacenes y transporte","C) Minimizar rotación de inventario","D) Maximizar producción"], answer:1, explanation:"Se busca optimizar la ubicación de almacenes y transporte para eficiencia. Fuente: Ballou, R. (2004)."},
+  {text:"La logística inversa se refiere a:", options:["A) Distribución normal","B) Retorno de productos y reciclaje","C) Planeación de demanda","D) Control de inventarios"], answer:1, explanation:"La logística inversa gestiona devoluciones, reciclaje y reprocesos. Fuente: Ballou, R. (2004)."},
+  {text:"La coordinación de la cadena de suministro incluye:", options:["A) Planificación de demanda","B) Coordinación de proveedores y producción","C) Transporte","D) Todo lo anterior"], answer:3, explanation:"Incluye planificación de demanda, coordinación de proveedores, producción y transporte. Fuente: Ballou, R. (2004)."},
+  {text:"El transporte en la cadena de suministro busca:", options:["A) Minimizar costos y tiempos","B) Incrementar inventario","C) Reducir calidad","D) Aumentar proveedores"], answer:0, explanation:"El transporte busca minimizar costos y tiempos de entrega. Fuente: Ballou, R. (2004)."},
+  {text:"La gestión de inventarios busca:", options:["A) Mantener niveles adecuados de stock","B) Reducir rotación","C) Incrementar tiempos de entrega","D) Evitar pedidos"], answer:0, explanation:"Mantener niveles de stock adecuados para satisfacer la demanda. Fuente: Ballou, R. (2004)."},
+  {text:"La planeación de capacidad se realiza para:", options:["A) Determinar necesidades de transporte","B) Evaluar recursos productivos y satisfacer demanda","C) Control de calidad","D) Minimizar inventarios"], answer:1, explanation:"Se evalúan los recursos productivos disponibles para cumplir con la demanda. Fuente: Ballou, R. (2004)."}
+];
+
+let currentQuestion = 0;
+let timerInterval;
+let timeLeft = 60*60; // 60 minutos en segundos
+
+function startQuiz(){
+  document.getElementById("nextBtn").style.display = "inline";
+  timerInterval = setInterval(updateTimer,1000);
+  showQuestion();
+}
+
+function updateTimer(){
+  let minutes = Math.floor(timeLeft/60);
+  let seconds = timeLeft%60;
+  document.getElementById('timer').innerText = `Tiempo restante: ${minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+  if(timeLeft<=0){ clearInterval(timerInterval); alert("Tiempo terminado"); }
+  timeLeft--;
+}
+
+function showQuestion(){
+  if(currentQuestion>=questions.length){
+    document.getElementById('quiz').innerHTML="<h2>Bloque terminado</h2>";
+    document.getElementById('nextBtn').style.display="none";
+    return;
+  }
+  let q = questions[currentQuestion];
+  let html = `<div class="question"><b>${q.text}</b><br>`;
+  q.options.forEach((opt,i)=>{
+    html+=`<div class="option"><input type="radio" name="q${currentQuestion}" id="opt${i}" onclick="checkAnswer(${i})"> ${opt}</div>`;
+  });
+  document.getElementById('quiz').innerHTML=html;
+  document.getElementById('feedback').innerHTML="";
+}
+
+function checkAnswer(selected){
+  let q=questions[currentQuestion];
+  let fb=document.getElementById('feedback');
+  if(selected===q.answer){ fb.innerHTML="Correcto ✅<br>"+q.explanation; }
+  else{ fb.innerHTML="Incorrecto ❌<br>"+q.explanation; }
+}
+
+function nextQuestion(){
+  currentQuestion++;
+  showQuestion();
+}
+</script>
+</body>
+</html>
